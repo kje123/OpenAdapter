@@ -5,6 +5,6 @@ Very WIP
 
 Code is based on:
 
-Haystack's pio-joybus: https://github.com/JonnyHaystack/joybus-pio
+Haystack's joybus-pio: https://github.com/JonnyHaystack/joybus-pio
 
 NiceMitch's GC Pocket: https://github.com/HandHeldLegend/GC-Adapter-ESP32-S3
