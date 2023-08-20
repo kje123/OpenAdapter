@@ -1140,14 +1140,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "GamecubeController::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-GamecubeController-Debug-6521633b2599cdfa0f84.json",
+					"jsonFile" : "target-GamecubeController-Debug-7f293d666b06ed2ceb95.json",
 					"name" : "GamecubeController",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "GamecubeController_joybus_pio_h::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-GamecubeController_joybus_pio_h-Debug-1b9013282c2981de68c3.json",
+					"jsonFile" : "target-GamecubeController_joybus_pio_h-Debug-eb1faeef21095ac91741.json",
 					"name" : "GamecubeController_joybus_pio_h",
 					"projectIndex" : 0
 				},

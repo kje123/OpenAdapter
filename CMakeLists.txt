@@ -15,6 +15,7 @@ add_executable(
   src/main.cpp
   src/joybus.c
   src/GamecubeController.cpp
+  src/usb_descriptors.cpp
 )
 
 pico_generate_pio_header(GamecubeController ${CMAKE_CURRENT_LIST_DIR}/src/joybus.pio)
