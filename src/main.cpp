@@ -3,6 +3,7 @@
 
 #include <hardware/pio.h>
 #include <pico/stdlib.h>
+#include <time.h>
 #include "tusb.h"
 #include "tusb_types.h"
 #include "bsp/board.h"
@@ -31,110 +32,59 @@ static const tusb_desc_device_t gc_descriptor_dev = {
 
 /**** GameCube Adapter HID Report Descriptor ****/
 const uint8_t gc_hid_report_descriptor[] = {
-    0x05, 0x05,        // Usage Page (Game Ctrls)
-    0x09, 0x00,        // Usage (Undefined)
+    0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
+    0x09, 0x05,        // Usage (Game Pad)
     0xA1, 0x01,        // Collection (Application)
-    0x85, 0x11,        //   Report ID (17) (rumble)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x05,        //   Report Count (5)
-    0x91, 0x00,        //   Output (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
+    0xA1, 0x03,        //   Collection (Report)
+    0x85, 0x11,        //     Report ID (17)
+    0x19, 0x00,        //     Usage Minimum (Undefined)
+    0x2A, 0xFF, 0x00,  //     Usage Maximum (0xFF)
+    0x15, 0x00,        //     Logical Minimum (0)
+    0x26, 0xFF, 0x00,  //     Logical Maximum (255)
+    0x75, 0x08,        //     Report Size (8)
+    0x95, 0x05,        //     Report Count (5)
+    0x91, 0x00,        //     Output (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
+    0xC0,              //   End Collection
+    0xA1, 0x03,        //   Collection (Report)
+    0x85, 0x21,        //     Report ID (33)
+    0x05, 0x00,        //     Usage Page (Undefined)
+    0x15, 0x00,        //     Logical Minimum (0)
+    0x25, 0xFF,        //     Logical Maximum (-1)
+    0x75, 0x08,        //     Report Size (8)
+    0x95, 0x01,        //     Report Count (1)
+    0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+    0x05, 0x09,        //     Usage Page (Button)
+    0x19, 0x01,        //     Usage Minimum (0x01)
+    0x29, 0x08,        //     Usage Maximum (0x08)
+    0x15, 0x00,        //     Logical Minimum (0)
+    0x25, 0x01,        //     Logical Maximum (1)
+    0x75, 0x08,        //     Report Size (8)
+    0x95, 0x02,        //     Report Count (2)
+    0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+    0x05, 0x01,        //     Usage Page (Generic Desktop Ctrls)
+    0x09, 0x30,        //     Usage (X)
+    0x09, 0x31,        //     Usage (Y)
+    0x09, 0x32,        //     Usage (Z)
+    0x09, 0x33,        //     Usage (Rx)
+    0x09, 0x34,        //     Usage (Ry)
+    0x09, 0x35,        //     Usage (Rz)
+    0x15, 0x81,        //     Logical Minimum (-127)
+    0x25, 0x7F,        //     Logical Maximum (127)
+    0x75, 0x08,        //     Report Size (8)
+    0x95, 0x06,        //     Report Count (6)
+    0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+    0xC0,              //   End Collection
+    0xA1, 0x03,        //   Collection (Report)
+    0x85, 0x13,        //     Report ID (19)
+    0x19, 0x00,        //     Usage Minimum (Undefined)
+    0x2A, 0xFF, 0x00,  //     Usage Maximum (0xFF)
+    0x15, 0x00,        //     Logical Minimum (0)
+    0x26, 0xFF, 0x00,  //     Logical Maximum (255)
+    0x75, 0x08,        //     Report Size (8)
+    0x95, 0x01,        //     Report Count (1)
+    0x91, 0x00,        //     Output (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
+    0xC0,              //   End Collection
     0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x21,        //   Report ID (33) (inputs)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x25,        //   Report Count (37)
-    0x81, 0x00,        //   Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x12,        //   Report ID (18)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x01,        //   Report Count (1)
-    0x91, 0x00,        //   Output (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-    0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x22,        //   Report ID (34)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x19,        //   Report Count (25)
-    0x81, 0x00,        //   Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x13,        //   Report ID (19)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x01,        //   Report Count (1)
-    0x91, 0x00,        //   Output (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-    0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x23,        //   Report ID (35)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x02,        //   Report Count (2)
-    0x81, 0x00,        //   Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x14,        //   Report ID (20)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x01,        //   Report Count (1)
-    0x91, 0x00,        //   Output (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-    0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x24,        //   Report ID (36)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x02,        //   Report Count (2)
-    0x81, 0x00,        //   Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x15,        //   Report ID (21)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x01,        //   Report Count (1)
-    0x91, 0x00,        //   Output (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-    0xC0,              // End Collection
-    0xA1, 0x01,        // Collection (Application)
-    0x85, 0x25,        //   Report ID (37)
-    0x19, 0x00,        //   Usage Minimum (Undefined)
-    0x2A, 0xFF, 0x00,  //   Usage Maximum (0xFF)
-    0x15, 0x00,        //   Logical Minimum (0)
-    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
-    0x75, 0x08,        //   Report Size (8)
-    0x95, 0x02,        //   Report Count (2)
-    0x81, 0x00,        //   Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0xC0,              // End Collection
-
-    // 214 bytes
 };
 
 char *string_desc_arr[] = {
@@ -257,77 +207,66 @@ void gc_reset_data(void) {
 }
 
 void send_data(void) {
-    if(tud_ready()) {
-        gc_usb_report curr;
-
-        // set first bit to id
-        buffer[0] = 0x21;
-
-        // set unused ports to inactive bytecode
-        buffer[10] = 0x04;
-        buffer[19] = 0x04;
-        buffer[28] = 0x04;
-
-        // digital
-        curr.a = gc_report.a;
-        curr.b = gc_report.b;
-        curr.x = gc_report.x;
-        curr.y = gc_report.y;
-        curr.z = gc_report.z;
-        curr.l = gc_report.l;
-        curr.r = gc_report.r;
-        curr.start = gc_report.start;
-        curr.dl = gc_report.dpad_left;
-        curr.dr = gc_report.dpad_right;
-        curr.dd = gc_report.dpad_down;
-        curr.du = gc_report.dpad_up;
-
-        // analog
-        curr.a_x = gc_report.stick_x;
-        curr.a_y = gc_report.stick_y;
-        curr.c_x = gc_report.cstick_x;
-        curr.c_y = gc_report.cstick_y;
-        curr.a_l = gc_report.l_analog;
-        curr.a_r = gc_report.r_analog;
-
-        if(!isActive[0]) {
-            buffer[1] = 0x14;
-            isActive[0] = true;
-        } else {
-            // copy reports into buffer
-            memcpy(&buffer[2], &curr, 8);
-        }
-
-        tud_hid_report(0, &buffer, 37);
+    if(!tud_ready()) {
+        return;
     }
+    gc_usb_report curr;
+
+    // set first bit to id
+    buffer[0] = 0x21;
+
+    // set unused ports to inactive bytecode
+    buffer[1] = 0x14;
+    buffer[10] = 0x04;
+    buffer[19] = 0x04;
+    buffer[28] = 0x04;
+
+    // digital
+    curr.a = gc_report.a;
+    curr.b = gc_report.b;
+    curr.x = gc_report.x;
+    curr.y = gc_report.y;
+    curr.z = gc_report.z;
+    curr.l = gc_report.l;
+    curr.r = gc_report.r;
+    curr.start = gc_report.start;
+    curr.dl = gc_report.dpad_left;
+    curr.dr = gc_report.dpad_right;
+    curr.dd = gc_report.dpad_down;
+    curr.du = gc_report.dpad_up;
+
+    // analog
+    curr.a_x = gc_report.stick_x;
+    curr.a_y = gc_report.stick_y;
+    curr.c_x = gc_report.cstick_x;
+    curr.c_y = gc_report.cstick_y;
+    curr.a_l = gc_report.l_analog;
+    curr.a_r = gc_report.r_analog;
+
+    // copy reports into buffer
+    memcpy(&buffer[2], &curr, 8);
+
+    tud_hid_report(0, &buffer, 37);
 }
 
 bool rumbleToggle = 0;
 
 int main(void) {
     set_sys_clock_khz(130'000, true);
+    board_init();
+    tusb_init();
 
     uint joybus_pin = 1;
 
     gcc = new GamecubeController(joybus_pin, 1000, pio0);
 
-    board_init();
-    tusb_init();
-
-    uint16_t usb_time = 0;
 
     while (true) {
-        usb_time++;
-        if(usb_time > 200) {
-            usb_time = 0;
-            gcc->Poll(&gc_report, rumbleToggle);
-            gc_reset_data();
-            tud_task();
-            send_data();
-        }
+        send_data();
+        gcc->Poll(&gc_report, rumbleToggle);
+        tud_task();
     }
 }
-
 
 //--------------------------------------------------------------------+
 // USB HID
