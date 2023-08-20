@@ -256,6 +256,52 @@ void gc_reset_data(void) {
     isActive[0] = false;
 }
 
+void send_data(void) {
+    if(tud_ready()) {
+        gc_usb_report curr;
+
+        // set first bit to id
+        buffer[0] = 0x21;
+
+        // set unused ports to inactive bytecode
+        buffer[10] = 0x04;
+        buffer[19] = 0x04;
+        buffer[28] = 0x04;
+
+        // digital
+        curr.a = gc_report.a;
+        curr.b = gc_report.b;
+        curr.x = gc_report.x;
+        curr.y = gc_report.y;
+        curr.z = gc_report.z;
+        curr.l = gc_report.l;
+        curr.r = gc_report.r;
+        curr.start = gc_report.start;
+        curr.dl = gc_report.dpad_left;
+        curr.dr = gc_report.dpad_right;
+        curr.dd = gc_report.dpad_down;
+        curr.du = gc_report.dpad_up;
+
+        // analog
+        curr.a_x = gc_report.stick_x;
+        curr.a_y = gc_report.stick_y;
+        curr.c_x = gc_report.cstick_x;
+        curr.c_y = gc_report.cstick_y;
+        curr.a_l = gc_report.l_analog;
+        curr.a_r = gc_report.r_analog;
+
+        if(!isActive[0]) {
+            buffer[1] = 0x14;
+            isActive[0] = true;
+        } else {
+            // copy reports into buffer
+            memcpy(&buffer[2], &curr, 8);
+        }
+
+        tud_hid_report(0, &buffer, 37);
+    }
+}
+
 bool rumbleToggle = 0;
 
 int main(void) {
@@ -277,6 +323,7 @@ int main(void) {
             gcc->Poll(&gc_report, rumbleToggle);
             gc_reset_data();
             tud_task();
+            send_data();
         }
     }
 }
@@ -317,51 +364,9 @@ uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance)
     return gc_hid_report_descriptor;
 }
 
-void tud_hid_report_complete_cb(uint8_t instance, uint8_t const* report, uint8_t len)
-{
-    if(tud_ready()) {
-        if(report[0] == 0x21) { // if report id is 33, process inputs
-            gc_usb_report curr;
-
-            // set first bit to id
-            buffer[0] = 0x21;
-
-            // set unused ports to inactive bytecode
-            buffer[10] = 0x00;
-            buffer[19] = 0x00;
-            buffer[28] = 0x00;
-
-            // digital
-            curr.a = gc_report.a;
-            curr.b = gc_report.b;
-            curr.x = gc_report.x;
-            curr.y = gc_report.y;
-            curr.z = gc_report.z;
-            curr.l = gc_report.l;
-            curr.r = gc_report.r;
-            curr.start = gc_report.start;
-            curr.dl = gc_report.dpad_left;
-            curr.dr = gc_report.dpad_right;
-            curr.dd = gc_report.dpad_down;
-            curr.du = gc_report.dpad_up;
-
-            // analog
-            curr.a_x = gc_report.stick_x;
-            curr.a_y = gc_report.stick_y;
-            curr.c_x = gc_report.cstick_x;
-            curr.c_y = gc_report.cstick_y;
-            curr.a_l = gc_report.l_analog;
-            curr.a_r = gc_report.r_analog;
-
-            if(!isActive[0]) {
-                buffer[1] = 0x10;
-                isActive[0] = true;
-            } else {
-                // copy reports into buffer
-                memcpy(&buffer[2], &curr, 8);
-            }
-
-            tud_hid_report(0, &buffer, 37);
-        }
+void tud_hid_report_complete_cb(uint8_t instance, uint8_t const* report, uint8_t len) {
+    if(report[0] == 0x21) { // if report id is 33, process inputs
+        send_data();
     }
 }
+

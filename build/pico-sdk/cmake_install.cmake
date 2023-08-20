@@ -39,9 +39,9 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/keith/Documents/gccadapter/build/pico-sdk/tools/cmake_install.cmake")
-  include("C:/Users/keith/Documents/gccadapter/build/pico-sdk/src/cmake_install.cmake")
-  include("C:/Users/keith/Documents/gccadapter/build/pico-sdk/docs/cmake_install.cmake")
+  include("C:/Users/keith/Documents/OpenAdapter/build/pico-sdk/tools/cmake_install.cmake")
+  include("C:/Users/keith/Documents/OpenAdapter/build/pico-sdk/src/cmake_install.cmake")
+  include("C:/Users/keith/Documents/OpenAdapter/build/pico-sdk/docs/cmake_install.cmake")
 
 endif()
 

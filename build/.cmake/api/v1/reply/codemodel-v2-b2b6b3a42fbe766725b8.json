@@ -1140,7 +1140,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "GamecubeController::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-GamecubeController-Debug-8a69763124ab3dacaf58.json",
+					"jsonFile" : "target-GamecubeController-Debug-6521633b2599cdfa0f84.json",
 					"name" : "GamecubeController",
 					"projectIndex" : 0
 				},
@@ -1154,7 +1154,7 @@
 				{
 					"directoryIndex" : 43,
 					"id" : "bs2_default::@bc554eaed616d198a22d",
-					"jsonFile" : "target-bs2_default-Debug-e96536bf61b8f2ff2a46.json",
+					"jsonFile" : "target-bs2_default-Debug-823313cb0d699fdb7cf5.json",
 					"name" : "bs2_default",
 					"projectIndex" : 1
 				},
@@ -1199,8 +1199,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/keith/Documents/gccadapter/build",
-		"source" : "C:/Users/keith/Documents/gccadapter"
+		"build" : "C:/Users/keith/Documents/OpenAdapter/build",
+		"source" : "C:/Users/keith/Documents/OpenAdapter"
 	},
 	"version" : 
 	{
