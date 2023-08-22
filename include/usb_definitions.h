@@ -38,6 +38,18 @@ typedef struct __attribute__ ((packed)) {
 
 } gc_usb_report;
 
+const gc_usb_report probe_report = {
+    .b1 = 0,
+    .b2 = 0,
+    .a_x = 128,
+    .a_y = 128,
+    .c_x = 128,
+    .c_y = 128,
+    .a_l = 0,
+    .a_r = 0
+
+};
+
 /**** GameCube Adapter HID Report Descriptor ****/
 const uint8_t gc_hid_report_descriptor[] = {
     0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)

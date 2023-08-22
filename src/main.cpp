@@ -1,5 +1,6 @@
 #include <hardware/pio.h>
 #include <pico/stdlib.h>
+#include <pico/multicore.h>
 #include <time.h>
 
 #include "GamecubeController.hpp"
@@ -18,19 +19,15 @@ bool rumbleToggle = 0;
 // index 0 is p1, 1 is p2
 bool isActive [2] = { 0, 0 };
 
-void send_data(void) {
+void send_data() {
     if(!tud_ready()) {
         return;
     }
+
     gc_usb_report curr;
 
     // set first bit to id
     buffer[0] = 0x21;
-
-    // set unused ports to inactive bytecode
-    buffer[10] = 0x04;
-    buffer[19] = 0x04;
-    buffer[28] = 0x04;
 
     // digital
     curr.a = gc_report.a;
@@ -55,14 +52,25 @@ void send_data(void) {
     curr.a_r = gc_report.r_analog;
 
     if(!isActive[0]) {
+        // set unused ports to inactive bytecode
         buffer[1] = 0x14;
+        buffer[10] = 0x04;
+        buffer[19] = 0x04;
+        buffer[28] = 0x04;
         isActive[0] = true;
     } else {
-        // copy reports into buffer
         memcpy(&buffer[2], &curr, 8);
     }
 
     tud_hid_report(0, &buffer, 37);
+}
+
+void joybus_main(void) {
+    uint joybus_pin = 1;
+    gcc = new GamecubeController(joybus_pin, 1000, pio1);
+    while(true) {
+        gcc->Poll(&gc_report, rumbleToggle);
+    }
 }
 
 int main(void) {
@@ -70,14 +78,13 @@ int main(void) {
     board_init();
     tusb_init();
 
-    uint joybus_pin = 1;
+    sleep_ms(2000);
 
-    gcc = new GamecubeController(joybus_pin, 1000, pio0);
+    multicore_launch_core1(joybus_main);
 
     while (true) {
-        send_data();
-        gcc->Poll(&gc_report, rumbleToggle);
         tud_task();
+        send_data();
     }
 }
 
