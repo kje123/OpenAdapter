@@ -48,6 +48,11 @@ class GamecubeController {
      */
     int GetOffset();
 
+
+  public:
+    bool _initialized;
+    bool _init();
+
   private:
     static constexpr uint incoming_bit_length_us = 4;
     // Give a whole 5 bytes of leniency on receive so the controller has time to do processing
@@ -58,10 +63,8 @@ class GamecubeController {
     joybus_port_t _port;
     uint _polling_period_us;
     gc_status_t _status;
-    bool _initialized;
     absolute_time_t _next_poll;
 
-    bool _init();
     void _wait_poll_cooldown();
 };
 

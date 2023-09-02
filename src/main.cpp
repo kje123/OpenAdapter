@@ -15,6 +15,12 @@ gc_report_t gc_report = default_gc_report;
 uint8_t buffer[37];
 bool rumbleToggle = 0;
 
+int phase = 0;
+bool isReady = 0;
+int timer = 0;
+#define LED_PIN 25
+#define GC_AXIS_CENTER 128
+
 // needed to check if port is being used
 // index 0 is p1, 1 is p2
 bool isActive [2] = { 0, 0 };
@@ -29,27 +35,38 @@ void send_data() {
     // set first bit to id
     buffer[0] = 0x21;
 
-    // digital
-    curr.a = gc_report.a;
-    curr.b = gc_report.b;
-    curr.x = gc_report.x;
-    curr.y = gc_report.y;
-    curr.z = gc_report.z;
-    curr.l = gc_report.l;
-    curr.r = gc_report.r;
-    curr.start = gc_report.start;
-    curr.dl = gc_report.dpad_left;
-    curr.dr = gc_report.dpad_right;
-    curr.dd = gc_report.dpad_down;
-    curr.du = gc_report.dpad_up;
+    if(!(gcc->_initialized)) {
+        curr.b1 = 0x00;
+        curr.b2 = 0x00;
+        curr.a_x = GC_AXIS_CENTER;
+        curr.a_y = GC_AXIS_CENTER;
+        curr.c_x = GC_AXIS_CENTER;
+        curr.c_y = GC_AXIS_CENTER;
+        curr.a_l = 0;
+        curr.a_r = 0;
+    } else {
+        // digital
+        curr.a = gc_report.a;
+        curr.b = gc_report.b;
+        curr.x = gc_report.x;
+        curr.y = gc_report.y;
+        curr.z = gc_report.z;
+        curr.l = gc_report.l;
+        curr.r = gc_report.r;
+        curr.start = gc_report.start;
+        curr.dl = gc_report.dpad_left;
+        curr.dr = gc_report.dpad_right;
+        curr.dd = gc_report.dpad_down;
+        curr.du = gc_report.dpad_up;
 
-    // analog
-    curr.a_x = gc_report.stick_x;
-    curr.a_y = gc_report.stick_y;
-    curr.c_x = gc_report.cstick_x;
-    curr.c_y = gc_report.cstick_y;
-    curr.a_l = gc_report.l_analog;
-    curr.a_r = gc_report.r_analog;
+        // analog
+        curr.a_x = gc_report.stick_x;
+        curr.a_y = gc_report.stick_y;
+        curr.c_x = gc_report.cstick_x;
+        curr.c_y = gc_report.cstick_y;
+        curr.a_l = gc_report.l_analog;
+        curr.a_r = gc_report.r_analog;
+    }
 
     if(!isActive[0]) {
         // set unused ports to inactive bytecode
@@ -65,6 +82,14 @@ void send_data() {
     tud_hid_report(0, &buffer, 37);
 }
 
+void led_task(void) {
+    if(phase) {
+        gpio_put(LED_PIN, 1);
+    } else {
+        gpio_put(LED_PIN, 0);
+    }
+}
+
 void joybus_main(void) {
     uint joybus_pin = 1;
     gcc = new GamecubeController(joybus_pin, 1000, pio1);
@@ -77,14 +102,17 @@ int main(void) {
     set_sys_clock_khz(130'000, true);
     board_init();
     tusb_init();
-
-    sleep_ms(2000);
+    gpio_init(LED_PIN);
+    gpio_set_dir(LED_PIN, GPIO_OUT);
 
     multicore_launch_core1(joybus_main);
 
+    send_data();
+
     while (true) {
-        tud_task();
         send_data();
+        tud_task();
+        led_task();
     }
 }
 
@@ -120,8 +148,9 @@ uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance) {
     return gc_hid_report_descriptor;
 }
 
-void tud_hid_report_complete_cb(uint8_t instance, uint8_t const* report, uint8_t len) {
-    if(report[0] == 0x21) { // if report id is 33, process inputs
-        send_data();
+void tud_hid_report_complete_cb(uint8_t instance, uint8_t const* report, uint8_t len)
+{
+    if (report[0] == 0x21) {
+        
     }
 }
