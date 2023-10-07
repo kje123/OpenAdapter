@@ -10,7 +10,7 @@
 1641	1731	7144419891294891	pico-sdk/src/rp2_common/boot_stage2/bs2_default_padded_checksummed.S	32c532d3a5d0548
 81	419	7144430241171218	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/hardware_irq/irq_handler_chain.S.obj	13789829c24a011f
 1179	1550	7144430252645751	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/pico_standard_link/binary_info.c.obj	254f3aebc4c00964
-38	453	7144430241875458	CMakeFiles/GamecubeController.dir/src/joybus.c.obj	e430356e4db62942
+36	191	7160211090601308	CMakeFiles/GamecubeController.dir/src/joybus.c.obj	e430356e4db62942
 55	502	7144430241715310	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/hardware_gpio/gpio.c.obj	7b04e5f29633bcb6
 1222	1782	7144430255005964	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/hardware_pio/pio.c.obj	cc68783493539831
 64	301	7144430240121957	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/hardware_claim/claim.c.obj	4c2aa4197032d797
@@ -28,9 +28,9 @@
 97	518	7144430242566970	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/common/pico_sync/mutex.c.obj	e707799010461b9d
 301	630	7144430243412964	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/common/pico_time/timeout_helper.c.obj	1948c6392455d047
 1185	1673	7144430253898283	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/pico_stdio/stdio.c.obj	d9571267170bc1da
-43	255	7145610460890218	CMakeFiles/GamecubeController.dir/src/GamecubeController.cpp.obj	31d563d9974966c1
+37	469	7183643898650047	CMakeFiles/GamecubeController.dir/src/GamecubeController.cpp.obj	31d563d9974966c1
 307	542	7144430242806178	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/hardware_timer/timer.c.obj	3e9b8d58fce304dc
-38	329	7145612663542580	CMakeFiles/GamecubeController.dir/src/main.cpp.obj	fa76ae7777234834
+37	296	7183670758921241	CMakeFiles/GamecubeController.dir/src/main.cpp.obj	fa76ae7777234834
 579	699	7144430244338373	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/hardware_divider/divider.S.obj	abbde8eafe79a7c1
 1395	1667	7144430253530801	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/lib/tinyusb/src/class/dfu/dfu_rt_device.c.obj	b5bb6f987e0f2be0
 419	958	7144430246887463	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/common/pico_util/pheap.c.obj	fe92501552c104fe
@@ -56,7 +56,7 @@
 1657	1875	7144430255996691	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/lib/tinyusb/src/class/vendor/vendor_device.c.obj	eb854adbd7204d37
 1442	1650	7144430253822952	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/lib/tinyusb/src/class/midi/midi_device.c.obj	7bed578180dcc602
 815	1488	7144430252205061	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/pico_double/double_math.c.obj	3bde4d0d4a789368
-21	1175	7153941871935129	build.ninja	9b05ff8795c97132
+21	1175	7184217061535106	build.ninja	9b05ff8795c97132
 1071	1242	7144430249609646	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/pico_standard_link/crt0.S.obj	88cab10cdee40cbc
 586	1136	7144430248333196	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/pico_runtime/runtime.c.obj	a410215ccc0cbac9
 1311	1442	7144430251872471	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/lib/tinyusb/src/class/cdc/cdc_device.c.obj	4dffa8b1b3169abe
@@ -77,10 +77,8 @@
 1692	2077	7144430258243711	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/lib/tinyusb/src/common/tusb_fifo.c.obj	1476e581c56999
 1417	1864	7144430255970663	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/lib/tinyusb/src/class/hid/hid_device.c.obj	c00f0b107f11f0c0
 1680	2060	7144430258045998	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/lib/tinyusb/src/tusb.c.obj	6d886d3210154481
-330	666	7145612665573042	GamecubeController.elf	8e36dc37c7e5206
+297	592	7183670760692847	GamecubeController.elf	8e36dc37c7e5206
 37	106	7144419875080386	C:/Users/keith/Documents/OpenAdapter/build/joybus.pio.h	62168348c26030e1
 1621	1641	7144419890424804	C:/Users/keith/Documents/OpenAdapter/build/pico-sdk/src/rp2_common/boot_stage2/bs2_default.bin	f5d26551120661c
 48	296	7145494913585056	CMakeFiles/GamecubeController.dir/src/usb_descriptors.cpp.obj	f62bde8507c80b91
 1762	2017	7144430257649241	CMakeFiles/GamecubeController.dir/C_/Program_Files/Raspberry_Pi/Pico_SDK_v1.5.1/pico-sdk/src/rp2_common/pico_multicore/multicore.c.obj	d43d888f8d2b532f
-37	1289	7153948138262178	CMakeFiles/GamecubeController.dir/src/main.cpp.obj	fa76ae7777234834
-1290	2079	7153948144433751	GamecubeController.elf	8e36dc37c7e5206

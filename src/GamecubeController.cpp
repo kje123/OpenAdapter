@@ -4,6 +4,8 @@
 #include <hardware/timer.h>
 #include <pico/stdlib.h>
 #include <pico/time.h>
+#include <stdio.h>
+#include <string>
 
 GamecubeController::GamecubeController(uint pin, uint polling_rate, PIO pio, int sm, int offset) {
     joybus_port_init(&_port, pin, pio, sm, offset);
@@ -26,6 +28,8 @@ void __no_inline_not_in_flash_func(GamecubeController::_wait_poll_cooldown)() {
 }
 
 bool __no_inline_not_in_flash_func(GamecubeController::_init)() {
+    printf("\n Init");
+    printf("\nProbing...");
     // Send probe command.
     uint8_t probe_cmd[] = { (uint8_t)GamecubeCommand::PROBE };
     joybus_send_bytes(&_port, probe_cmd, sizeof(probe_cmd));
@@ -41,12 +45,14 @@ bool __no_inline_not_in_flash_func(GamecubeController::_init)() {
 
     // If response is invalid, return false.
     if (received_len != sizeof(gc_status_t) || _status.device == 0) {
+        printf("\nInvalid probe!");
         return false;
     }
 
     // Wait until start of next polling period before sending origin.
     _wait_poll_cooldown();
 
+    printf("\nOrigin...");
     // Send origin command.
     uint8_t origin_cmd[] = { (uint8_t)GamecubeCommand::ORIGIN };
     joybus_send_bytes(&_port, origin_cmd, sizeof(origin_cmd));
@@ -63,6 +69,7 @@ bool __no_inline_not_in_flash_func(GamecubeController::_init)() {
 
     // If response is invalid, return false.
     if (received_len != sizeof(gc_origin_t)) {
+        printf("\nOrigin invalid!");
         return false;
     }
 
@@ -98,6 +105,10 @@ bool __no_inline_not_in_flash_func(GamecubeController::Poll)(gc_report_t *report
     // If report origin bit is 1, it indicates that the controller is not initialized properly, so
     // we want to restart the initialization process.
     if (received_len != sizeof(gc_report_t) || report->origin) {
+        printf("\nInvalid poll! Resetting to origin...");
+        printf("\n Poll:");
+        printf("\n Size: %d", received_len);
+        printf("\n report: %d", report->origin);
         _initialized = false;
         return false;
     }

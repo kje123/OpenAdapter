@@ -1,6 +1,7 @@
 #include <hardware/pio.h>
 #include <pico/stdlib.h>
 #include <pico/multicore.h>
+#include <stdio.h>
 #include <time.h>
 
 #include "GamecubeController.hpp"
@@ -90,26 +91,21 @@ void led_task(void) {
     }
 }
 
-void joybus_main(void) {
-    uint joybus_pin = 1;
-    gcc = new GamecubeController(joybus_pin, 1000, pio1);
-    while(true) {
-        gcc->Poll(&gc_report, rumbleToggle);
-    }
-}
-
 int main(void) {
     set_sys_clock_khz(130'000, true);
+    stdio_init_all();
     board_init();
     tusb_init();
     gpio_init(LED_PIN);
     gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    multicore_launch_core1(joybus_main);
+    uint joybus_pin = 4;
+    gcc = new GamecubeController(joybus_pin, 1000, pio0, 0);
 
     send_data();
 
     while (true) {
+        gcc->Poll(&gc_report, rumbleToggle);
         send_data();
         tud_task();
         led_task();
